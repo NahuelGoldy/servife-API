@@ -1,25 +1,64 @@
 package com.servife.API.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.format.DateTimeFormatter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@Entity
+@Table(name = "acuerdos_trabajo")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
+        allowGetters = true)
 public class AcuerdoTrabajo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "idUsuario_fk")
     private Usuario cliente;
+
+    @OneToOne
+    @JoinColumn(name = "idProfesional_fk")
     private Profesional profesional;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInicio;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaFin;
+
     private String descripcion;
+
     private String status;
 
-    public AcuerdoTrabajo() {}
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    private Date updatedAt;
+
+    @Column(name = "eliminado")
+    @NotNull
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @JsonIgnore
+    private Boolean eliminado;
+
+    public AcuerdoTrabajo() {
+        this.eliminado = false;
+    }
 
     public Usuario getCliente() {
         return cliente;

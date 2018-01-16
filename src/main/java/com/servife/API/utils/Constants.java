@@ -1,4 +1,4 @@
 package com.servife.API.utils;
 
-public class Constants {
+public final class Constants {
 }

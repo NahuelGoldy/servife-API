@@ -1,9 +1,9 @@
 package com.servife.API.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "tareas")
 public class Tarea {
 
     @Id
@@ -11,7 +11,7 @@ public class Tarea {
     private Long id;
 
     private String nombre;
-    private Profesion profesion;
+    //private Profesion profesion;
 
     public Tarea() {}
 
